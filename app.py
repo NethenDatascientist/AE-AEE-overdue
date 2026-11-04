@@ -2011,7 +2011,7 @@ with hdr_col_center:
             clean_html(
                 """
                 <div class="premium-compact-header">
-                    <h1 class="premium-compact-title">Minor Irrigation — CE Analytics &amp; ETS Truth Audit</h1>
+                    <h1 class="premium-compact-title">Minor Irrigation — CE Analytics</h1>
                 </div>
                 """
             ),
