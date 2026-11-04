@@ -3245,26 +3245,25 @@ with page_view_slot.container(key="pc_page_dashboard"):
         plot_df["is_shrunk"] = shrink_outliers & (
             plot_df["total_works"] > BAR_SHRINK_THRESHOLD
         )
-
         def _build_bar_label(r) -> str:
-            shrink_tag = (
-                f" <span style='color:#FBBF24'>[>{BAR_SHRINK_THRESHOLD} Shrunk]</span>"
-                if r["is_shrunk"]
-                and chart_style == "Overlay (Overdue + ETS + Rest of Works)"
-                else ""
-            )
-            if sort_choice == "Highest Overdue Percentage (%) at Top":
-                return (
-                    f"  <b>{r['overdue_pct']:.1f}% Overdue</b> "
-                    f"({int(r['overdue_works'])} Overdue | "
-                    f"<span style='color:#4ADE80'>{int(r['ets_works'])} ETS</span> / "
-                    f"{int(r['total_works'])} Total){shrink_tag}"
-                )
+        shrink_tag = (
+            f" <span style='color:#FBBF24'>[>{BAR_SHRINK_THRESHOLD} Shrunk]</span>"
+            if r["is_shrunk"]
+            and chart_style == "Overlay (Overdue + ETS + Rest of Works)"
+            else ""
+        )
+        if sort_choice == "Highest Overdue Percentage (%) at Top":
             return (
-                f"  <b>{int(r['overdue_works'])} Overdue</b> | "
+                f"  <b>{r['overdue_pct']:.1f}% Overdue</b> "
+                f"({int(r['overdue_works'])} Overdue | "
                 f"<span style='color:#4ADE80'>{int(r['ets_works'])} ETS</span> / "
-                f"{int(r['total_works'])} Total ({r['overdue_pct']:.1f}%){shrink_tag}"
+                f"{int(r['total_works'])} Total){shrink_tag}"
             )
+        return (
+            f"  <b>{int(r['overdue_works'])} Overdue</b> | "
+            f"<span style='color:#4ADE80'>{int(r['ets_works'])} ETS</span> / "
+            f"{int(r['total_works'])} Total ({r['overdue_pct']:.1f}%){shrink_tag}"
+        )
 
         plot_df["bar_label"] = plot_df.apply(_build_bar_label, axis=1)
 
