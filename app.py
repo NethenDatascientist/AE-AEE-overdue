@@ -43,6 +43,7 @@ def clean_html(raw_html: str) -> str:
 
 # -----------------------------------------------------------------------------
 # INSTANT CSS KILL-SWITCH FOR INACTIVE PAGE CONTAINER
+# (Hides the inactive page on switch without collapsing active dropdown updates)
 # -----------------------------------------------------------------------------
 _active_page = st.session_state["pc_active_page"]
 _inactive_key = (
@@ -83,21 +84,16 @@ st.markdown(
                 width: 100% !important;
             }
 
-            /* Ultra-Smooth Page Mount Animation */
-            .st-key-pc_page_dashboard,
-            .st-key-pc_page_analytics {
-                animation: pcSmoothPageMount 0.16s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-                will-change: opacity, transform;
+            /* 3D Depth & Hover Growth on Plotly Donut Slices */
+            .js-plotly-plot .pie path.surface {
+                transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), filter 0.24s ease !important;
+                transform-box: fill-box !important;
+                transform-origin: center center !important;
+                filter: drop-shadow(0px 6px 6px rgba(0, 0, 0, 0.55));
             }
-            @keyframes pcSmoothPageMount {
-                0% {
-                    opacity: 0;
-                    transform: translateY(5px);
-                }
-                100% {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
+            .js-plotly-plot .pie g.slice:hover path.surface {
+                transform: scale(1.055) translateY(-4px) !important;
+                filter: drop-shadow(0px 12px 14px rgba(0, 0, 0, 0.78)) brightness(1.08) !important;
             }
 
             /* 1. Narrower, Sleek Left Sidebar (200px) */
@@ -958,24 +954,33 @@ UNASSIGNED_LABEL = "Unassigned (Empty)"
 BAR_SHRINK_THRESHOLD = 250
 BAR_SHRINK_MAX_EXTRA = 18.0
 
-# Render Environment Variable support with fallback to user's sheet URL
-DEFAULT_SHEET_URL = os.environ.get(
-    "SHEET_URL",
-    st.secrets.get(
-        "SHEET_URL",
-        "https://docs.google.com/spreadsheets/d/13W04z-fdU3RhuVJ5vQFRpK4BBSQRJWfscPqpr7Oj2Y8/edit?gid=270221191#gid=270221191",
-    ),
-)
 
-SCHEMA_VERSION = "v13_ce_overdue_analytics_clean"
-DISK_BACKUP_FILE = "/tmp/mi_overdue_shared_snapshot_v13.pkl"
+def get_default_sheet_url() -> str:
+    """Safely reads SHEET_URL from Render environment variables without requiring secrets.toml."""
+    fallback = "https://docs.google.com/spreadsheets/d/13W04z-fdU3RhuVJ5vQFRpK4BBSQRJWfscPqpr7Oj2Y8/edit?gid=270221191#gid=270221191"
+    env_url = os.environ.get("SHEET_URL")
+    if env_url and env_url.strip():
+        return env_url.strip()
+    try:
+        sec_url = st.secrets.get("SHEET_URL")
+        if sec_url and str(sec_url).strip():
+            return str(sec_url).strip()
+    except Exception:
+        pass
+    return fallback
+
+
+DEFAULT_SHEET_URL = get_default_sheet_url()
+
+SCHEMA_VERSION = "v14_render_clean_2page"
+DISK_BACKUP_FILE = "/tmp/mi_overdue_shared_snapshot_v14.pkl"
 
 
 # -----------------------------------------------------------------------------
 # SHARED SERVER MEMORY & LOCK
 # -----------------------------------------------------------------------------
 @st.cache_resource
-def get_shared_state_v13() -> dict:
+def get_shared_state_v14() -> dict:
     state = {
         "version": SCHEMA_VERSION,
         "lock": threading.Lock(),
@@ -2034,7 +2039,7 @@ with hdr_col_right:
 # -----------------------------------------------------------------------------
 # THREAD-SAFE DATA LOADING
 # -----------------------------------------------------------------------------
-shared_state = get_shared_state_v13()
+shared_state = get_shared_state_v14()
 
 if uploaded_xlsx is not None:
     file_id = f"{uploaded_xlsx.name}_{uploaded_xlsx.size}_{SCHEMA_VERSION}"
@@ -2248,16 +2253,10 @@ def render_executive_leaderboard_panel(
 
 
 # =============================================================================
-# ATOMIC PAGE SLOT (100% ISOLATED CONTAINERS FOR BOTH PAGES)
-# =============================================================================
-page_view_slot = st.empty()
-
-# =============================================================================
 # PAGE 2 VIEW: CE EXECUTIVE ANALYTICS & ETS TRUTH AUDIT SUITE
 # =============================================================================
 if st.session_state["pc_active_page"] == "analytics":
-    with page_view_slot.container(key="pc_page_analytics"):
-        # Identical 5-Column Top Filter Bar as Dashboard (Zero Width Shift)
+    with st.container(key="pc_page_analytics"):
         af_c1, af_c2, af_c3, af_c4, af_c5 = st.columns(5, gap="small")
 
         div_opts_an = [ALL_OPTION] + sorted(
@@ -2896,7 +2895,7 @@ if st.session_state["pc_active_page"] == "analytics":
 # =============================================================================
 # PAGE 1 VIEW: MAIN OVERDUE WORKS DASHBOARD
 # =============================================================================
-with page_view_slot.container(key="pc_page_dashboard"):
+with st.container(key="pc_page_dashboard"):
     f_col1, f_col2, f_col3, f_col4, f_col5 = st.columns(5, gap="small")
 
     unique_divisions = sorted(
@@ -2979,7 +2978,7 @@ with page_view_slot.container(key="pc_page_dashboard"):
     )
 
     # -------------------------------------------------------------------------
-    # TOP CONTROLS ROW 2: OFFICER VIEW & SORT ORDER (COMPACT & EMOJI-FREE)
+    # TOP CONTROLS ROW 2: OFFICER VIEW & SORT ORDER
     # -------------------------------------------------------------------------
     r_col1, r_col2 = st.columns(2, gap="small")
 
@@ -3124,7 +3123,7 @@ with page_view_slot.container(key="pc_page_dashboard"):
     k6.metric("🟢 'ETS' Works", f"{total_ets_all:,}")
 
     # =========================================================================
-    # PAGE 1: COMPACT SINGLE-LINE OVERDUE AGEING TREE (PRECOMPUTED 0ms)
+    # PAGE 1: COMPACT SINGLE-LINE OVERDUE AGEING TREE
     # =========================================================================
     od_u6_p1 = od_6_12_p1 = od_1_2_p1 = od_2_3_p1 = od_3_4_p1 = od_4_plus_p1 = 0
 
@@ -3247,10 +3246,24 @@ with page_view_slot.container(key="pc_page_dashboard"):
         )
 
         def _build_bar_label(r) -> str:
-            shrink_tag = f" <span style='color:#FBBF24'>[>{BAR_SHRINK_THRESHOLD} Shrunk]</span>" if r["is_shrunk"] and chart_style == "Overlay (Overdue + ETS + Rest of Works)" else ""
+            shrink_tag = (
+                f" <span style='color:#FBBF24'>[>{BAR_SHRINK_THRESHOLD} Shrunk]</span>"
+                if r["is_shrunk"]
+                and chart_style == "Overlay (Overdue + ETS + Rest of Works)"
+                else ""
+            )
             if sort_choice == "Highest Overdue Percentage (%) at Top":
-                return f"  <b>{r['overdue_pct']:.1f}% Overdue</b> ({int(r['overdue_works'])} Overdue | <span style='color:#4ADE80'>{int(r['ets_works'])} ETS</span> / {int(r['total_works'])} Total){shrink_tag}"
-            return f"  <b>{int(r['overdue_works'])} Overdue</b> | <span style='color:#4ADE80'>{int(r['ets_works'])} ETS</span> / {int(r['total_works'])} Total ({r['overdue_pct']:.1f}%){shrink_tag}"
+                return (
+                    f"  <b>{r['overdue_pct']:.1f}% Overdue</b> "
+                    f"({int(r['overdue_works'])} Overdue | "
+                    f"<span style='color:#4ADE80'>{int(r['ets_works'])} ETS</span> / "
+                    f"{int(r['total_works'])} Total){shrink_tag}"
+                )
+            return (
+                f"  <b>{int(r['overdue_works'])} Overdue</b> | "
+                f"<span style='color:#4ADE80'>{int(r['ets_works'])} ETS</span> / "
+                f"{int(r['total_works'])} Total ({r['overdue_pct']:.1f}%){shrink_tag}"
+            )
 
         plot_df["bar_label"] = plot_df.apply(_build_bar_label, axis=1)
 
