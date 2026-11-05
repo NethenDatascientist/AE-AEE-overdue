@@ -2705,7 +2705,7 @@ if st.session_state["pc_active_page"] == "analytics":
                     "⚖️ Min. Works for Ranking:",
                     min_value=1,
                     max_value=50,
-                    value=5,
+                    value=1,
                     help="Ensures officers with only 1 or 2 works do not skew the Percentage & Least Overdue rankings.",
                 )
         with lb_top_ctrl3:
