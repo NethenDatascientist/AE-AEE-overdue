@@ -2743,11 +2743,14 @@ if st.session_state["pc_active_page"] == "analytics":
             by=["overdue_pct", "overdue_works", "total_works"],
             ascending=[False, False, False],
         ).head(top_n_count)
-        ae_least_cnt = ae_qual.sort_values(
+        
+        # --- NEW LOGIC: Exclude 0 Overdue for the 'Least' leaderboards ---
+        ae_least_qual = ae_qual[ae_qual["overdue_works"] > 0].copy()
+        ae_least_cnt = ae_least_qual.sort_values(
             by=["overdue_works", "overdue_pct", "total_works"],
             ascending=[True, True, False],
         ).head(top_n_count)
-        ae_least_pct = ae_qual.sort_values(
+        ae_least_pct = ae_least_qual.sort_values(
             by=["overdue_pct", "overdue_works", "total_works"],
             ascending=[True, True, False],
         ).head(top_n_count)
@@ -2766,11 +2769,14 @@ if st.session_state["pc_active_page"] == "analytics":
             by=["overdue_pct", "overdue_works", "total_works"],
             ascending=[False, False, False],
         ).head(top_n_count)
-        aee_least_cnt = aee_qual.sort_values(
+        
+        # --- NEW LOGIC: Exclude 0 Overdue for the 'Least' leaderboards ---
+        aee_least_qual = aee_qual[aee_qual["overdue_works"] > 0].copy()
+        aee_least_cnt = aee_least_qual.sort_values(
             by=["overdue_works", "overdue_pct", "total_works"],
             ascending=[True, True, False],
         ).head(top_n_count)
-        aee_least_pct = aee_qual.sort_values(
+        aee_least_pct = aee_least_qual.sort_values(
             by=["overdue_pct", "overdue_works", "total_works"],
             ascending=[True, True, False],
         ).head(top_n_count)
