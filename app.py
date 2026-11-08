@@ -3658,7 +3658,7 @@ with st.container(key="pc_page_dashboard"):
         clean_html(
             f"""
             <div class="exec-section-banner">
-                <div class="exec-section-title">Combined Overdue Works by {html.escape(view_choice)}</div>
+                <div class="exec-section-title">Complete Overdue Work(s) Details Of Selected {html.escape(view_choice)}</div>
                 <div class="exec-scope-badge">{html.escape(filter_scope_label)}</div>
             </div>
             """
