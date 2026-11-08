@@ -15,18 +15,6 @@ import plotly.graph_objects as go
 import requests
 import streamlit as st
 import streamlit.components.v1 as components
-
-st.set_page_config(
-    page_title="MI Overdue Works — CE Mobile View",
-    page_icon="📱",
-    layout="centered",
-    initial_sidebar_state="collapsed",
-)
-
-# --- ADD YOUR VIDEO HERE ---
-st.video("https://github.com/NethenDatascientist/AE-AEE-overdue/blob/main/MI%20South.mp4")
-
-# (Rest of your app code follows below...)
 # -----------------------------------------------------------------------------
 # PAGE CONFIGURATION & NAVIGATION STATE
 # -----------------------------------------------------------------------------
