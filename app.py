@@ -74,12 +74,11 @@ st.markdown(
             :root {
                 color-scheme: light !important;
             }
-            /* Simulate 90% Browser Zoom */
-            html, body, .stApp {
-                zoom: 0.90 !important;
-                -moz-transform: scale(0.90); /* Firefox fallback */
-                -moz-transform-origin: top center;
+            /* Safe 90% Browser Zoom */
+            html {
+                zoom: 90% !important;
             }
+            
             /* 1. Zero-Glare Soft Cool Stone Canvas (No Pure White) */
             html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stMain"] {
                 background: linear-gradient(180deg, #DCE4EE 0%, #E2E8F0 50%, #CBD5E1 100%) !important;
