@@ -74,10 +74,6 @@ st.markdown(
             :root {
                 color-scheme: light !important;
             }
-            /* Safe 90% Browser Zoom */
-            html {
-                zoom: 90% !important;
-            }
             
             /* 1. Zero-Glare Soft Cool Stone Canvas (No Pure White) */
             html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stMain"] {
