@@ -2521,32 +2521,32 @@ if st.session_state["pc_active_page"] == "analytics":
                 f"""
                 <div class="pbi-kpi-grid">
                     <div class="pbi-kpi-card" style="background:linear-gradient(145deg,#CFFAFE,#E0F2FE);border:1px solid #67E8F9;border-top:4px solid #0E7490;">
-                        <div class="pbi-kpi-label">📋 Total Works in Scope</div>
+                        <div class="pbi-kpi-label">Total Works in Scope</div>
                         <div class="pbi-kpi-value">{tot_works_an:,}</div>
                         <div class="pbi-kpi-sub">{len(ae_stats_df)} AEs &bull; {len(aee_stats_df)} AEEs</div>
                     </div>
                     <div class="pbi-kpi-card" style="background:linear-gradient(145deg,#FEE2E2,#FECDD3);border:1px solid #FCA5A5;border-top:4px solid #B91C1C;">
-                        <div class="pbi-kpi-label">🔴 True Overdue ('P')</div>
+                        <div class="pbi-kpi-label">Overdue works</div>
                         <div class="pbi-kpi-value" style="color:#991B1B;">{tot_od_an:,} ({od_pct_an}%)</div>
                         <div class="pbi-kpi-sub">Past Target Date &amp; Not in ETS</div>
                     </div>
                     <div class="pbi-kpi-card" style="background:linear-gradient(145deg,#D1FAE5,#A7F3D0);border:1px solid #6EE7B7;border-top:4px solid #047857;">
-                        <div class="pbi-kpi-label">🟢 Claimed 'ETS' Works</div>
+                        <div class="pbi-kpi-label">ETS Works</div>
                         <div class="pbi-kpi-value" style="color:#065F46;">{tot_ets_an:,} ({ets_pct_an}%)</div>
                         <div class="pbi-kpi-sub">Extension of Time Status</div>
                     </div>
                     <div class="pbi-kpi-card" style="background:linear-gradient(145deg,#FEF3C7,#FDE68A);border:1px solid #FCD34D;border-top:4px solid #B45309;">
-                        <div class="pbi-kpi-label">⚠️ Total Delayed Exposure</div>
+                        <div class="pbi-kpi-label">Total Delayed Exposure</div>
                         <div class="pbi-kpi-value" style="color:#92400E;">{tot_delayed_an:,}</div>
-                        <div class="pbi-kpi-sub">Overdue ('P') + 'ETS' Combined</div>
+                        <div class="pbi-kpi-sub">Overdue + ETS Combined</div>
                     </div>
                     <div class="pbi-kpi-card" style="background:linear-gradient(145deg,#FCE7F3,#FBCFE8);border:1px solid #F472B6;border-top:4px solid #BE185D;">
-                        <div class="pbi-kpi-label">🕵️ Unexcused Overdue Ratio</div>
+                        <div class="pbi-kpi-label">Overdue Ratio</div>
                         <div class="pbi-kpi-value" style="color:#9D174D;">{unexcused_share_an}%</div>
                         <div class="pbi-kpi-sub">Of delayed works are NOT in ETS</div>
                     </div>
                     <div class="pbi-kpi-card" style="background:linear-gradient(145deg,#EDE9FE,#DDD6FE);border:1px solid #C4B5FD;border-top:4px solid #6D28D9;">
-                        <div class="pbi-kpi-label">⏳ Chronic Overdue (&gt;2 Yrs)</div>
+                        <div class="pbi-kpi-label">Chronic Overdue (&gt;2 Yrs)</div>
                         <div class="pbi-kpi-value" style="color:#5B21B6;">{chronic_2yr_plus:,}</div>
                         <div class="pbi-kpi-sub">Target elapsed by 2+ years</div>
                     </div>
@@ -2713,11 +2713,11 @@ if st.session_state["pc_active_page"] == "analytics":
                                     <div style="font-size:1.55rem;font-weight:800;color:#991B1B;">{o_od}</div>
                                 </div>
                                 <div style="background:#D1FAE5;border:1.5px solid #34D399;border-radius:8px;padding:12px;">
-                                    <div style="font-size:0.75rem;color:#065F46;text-transform:uppercase;font-weight:800;letter-spacing:0.5px;">In 'ETS'</div>
+                                    <div style="font-size:0.75rem;color:#065F46;text-transform:uppercase;font-weight:800;letter-spacing:0.5px;">ETS</div>
                                     <div style="font-size:1.55rem;font-weight:800;color:#065F46;">{o_ets}</div>
                                 </div>
                                 <div style="background:#DBEAFE;border:1.5px solid #60A5FA;border-radius:8px;padding:12px;">
-                                    <div style="font-size:0.75rem;color:#1E40AF;text-transform:uppercase;font-weight:800;letter-spacing:0.5px;">On-Track ('P')</div>
+                                    <div style="font-size:0.75rem;color:#1E40AF;text-transform:uppercase;font-weight:800;letter-spacing:0.5px;">In Progress</div>
                                     <div style="font-size:1.55rem;font-weight:800;color:#1E3A8A;">{o_ontrack}</div>
                                 </div>
                                 <div style="background:#CBD5E1;border:1.5px solid #94A3B8;border-radius:8px;padding:12px;">
