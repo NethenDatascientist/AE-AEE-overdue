@@ -1590,7 +1590,7 @@ def render_ce_overdue_html_table(
                     f'<div class="ce-work-name-clamp">{escaped_text}</div>'
                     f"</td>"
                 )
-            elif col in {"Target Date", "Overdue By", "Overdue Works ('P')", "Overdue %"}:
+            elif col in {"Target Date", "Overdue By", "Overdue Works", "Overdue %"}:
                 cells_html.append(
                     f'<td class="ce-date-overdue">{escaped_text}</td>'
                 )
@@ -3244,7 +3244,7 @@ with st.container(key="pc_page_dashboard"):
         chronic_2yr_plus_p1 = 0
 
     k1, k2, k3, k4, k5, k6 = st.columns(6, gap="medium")
-    k1.metric("📅 Date (Today)", today_str)
+    k1.metric("Date (Today)", today_str)
 
     officer_help_text = (
         f"Officers with >0 Overdue works (plus {unassigned_works_count:,} unassigned works)."
@@ -3253,21 +3253,21 @@ with st.container(key="pc_page_dashboard"):
     )
 
     k2.metric(
-        f"👥 {view_choice}s",
+        f"{view_choice}s",
         f"{named_officers_count:,}",
         help=officer_help_text,
     )
-    k3.metric("📋 Total Works", f"{total_assigned_all:,}")
+    k3.metric("Total Works", f"{total_assigned_all:,}")
     k4.metric(
-        "🔴 Overdue Works ('P')",
+        "Overdue Works",
         f"{total_overdue_all:,} ({overall_overdue_pct}%)",
     )
     k5.metric(
-        "⏳ Chronic Overdue (>2 Yrs)",
+        "Chronic Overdue (>2 Yrs)",
         f"{chronic_2yr_plus_p1:,}",
         help="Severe delays: Target date elapsed by more than 24 months.",
     )
-    k6.metric("🟢 'ETS' Works", f"{total_ets_all:,}")
+    k6.metric("ETS Works", f"{total_ets_all:,}")
 
     # =========================================================================
     # PAGE 1: COMPACT SINGLE-LINE OVERDUE AGEING TREE (TINTED PASTEL ROSE)
